@@ -62,7 +62,7 @@ def plot_experiments_results(exp_res_dict, args):
                     data_means = np.array(data_sums) / data_sizes
                     data_stds = np.sqrt(np.abs(data_sizes * (np.array(data_sums_of_squares) / data_sizes - data_means ** 2) /\
                                         np.where(data_sizes > 1, data_sizes - 1, 1)))
-                    label = r'$\tau = \hat{f}_{1}(x_{k})$' if tau == 'GNM' else r'$\tau = {:1.0E}$'.format(tau)
+                    label = r'$\tau_{k} = \hat{f}_{1}(x_{k})$' if tau == 'GNM' else r'$\tau_k = {:1.0E}$'.format(tau)
                     axes[row, col].plot(np.arange(1, data_means.size + 1), data_means, color=c, marker=marker, markevery=5,
                                         linewidth=1, ls='--', label=label)
                 axes[row, col].set_yscale('log')
