@@ -1,5 +1,5 @@
 # Description
-Code to conduct experiments for the paper **Modified Gauss-Newton method for solving a smooth system of nonlinear equations**.
+Code to conduct experiments for the paper [**Modified Gauss-Newton method for solving a smooth system of nonlinear equations**](https://www.mathnet.ru/php/archive.phtml?wshow=paper&jrnid=crm&paperid=911&option_lang=eng).
 
 ## Overview
 
@@ -10,11 +10,20 @@ Code to conduct experiments for the paper **Modified Gauss-Newton method for sol
 * *benchmark_utils.py* — routines for designed experiments;
 * *plotting.py* — routines for plotting results;
 
-Print help to list all hyperparameters of the experiments:
+Print help in command line in repository directory to list all hyperparameters of the experiments:
 ```
     python run_experiments.py -h
 ```
-Run the following command to obtain all experiment data in current directory:
+Run the following command in command line in repository directory to obtain all experiment data in current directory:
 ```
     python run_experiments.py
 ```
+
+## Requirements
+
+* [NumPy](https://numpy.org/)
+* [Matplotlib](https://matplotlib.org/)
+* [Seaborn](https://seaborn.pydata.org/)
+
+## References
+<a id="1">[1]</a> Yudin N.E. Modified Gauss–Newton method for solving a smooth system of nonlinear equations // Computer Research and Modeling, 2021, vol. 13, no. 4, pp. 697-723, [doi: https://doi.org/10.20537/2076-7633-2021-13-4-697-723](https://www.mathnet.ru/php/archive.phtml?wshow=paper&jrnid=crm&paperid=911&option_lang=eng)

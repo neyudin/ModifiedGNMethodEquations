@@ -34,7 +34,7 @@ parser.add_argument(
 parser.add_argument(
     '--verbose', type=bool, default=False, help='Whether to print auxiliary messages throughout the whole experiment.')
 parser.add_argument(
-    '--store_dir', type=str, default='.', help="The directory to store experiments' results.")
+    '--store_dir', type=str, default='./figures', help="The directory to store experiments' results.")
 parser.add_argument(
     '--n_dims', action=Store_as_array, type=int, nargs='+', default=np.array([10, 100, 1000]),
     help='The list of numbers of parameters.')
