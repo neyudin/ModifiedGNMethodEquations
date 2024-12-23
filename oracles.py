@@ -1,8 +1,8 @@
 import numpy as np
 
 
-lim_val = 1e+12 # Maximal absolute value of variables in experiments
-eps = 1e-6 # Tolerance of computations
+lim_val = 1e+12 # Maximal absolute value of variables in experiments.
+eps = 1e-6 # Tolerance of computations.
 
 
 class Oracle(object):
@@ -25,7 +25,7 @@ class Oracle(object):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of f_1
+            Indexes of used functions in the random sample of f_1.
         Returns
         -------
         float
@@ -42,7 +42,7 @@ class Oracle(object):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of f_2
+            Indexes of used functions in the random sample of f_2.
         Returns
         -------
         float
@@ -59,14 +59,14 @@ class Oracle(object):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of \nabla f_2
+            Indexes of used functions in the random sample of \nabla f_2.
         Returns
         -------
         float
             The value of \nabla f_2 evaluated at x.
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
-        return np.clip(2.0 * np.dot(self.dF(x, idxs).T, self.F(x, idxs)), a_min=-lim_val, a_max=lim_val)
+        return np.clip(2. * np.dot(self.dF(x, idxs).T, self.F(x, idxs)), a_min=-lim_val, a_max=lim_val)
     
     def F(self, x, idxs=None):
         """
@@ -76,7 +76,7 @@ class Oracle(object):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of F
+            Indexes of used functions in the random sample of F.
         Raises
         ------
         NotImplementedError
@@ -92,7 +92,7 @@ class Oracle(object):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of dF
+            Indexes of used functions in the random sample of dF.
         Raises
         ------
         NotImplementedError
@@ -116,7 +116,7 @@ class Oracle(object):
 class NesterovSkokovOracle(Oracle):
     """
     Nesterov--Skokov function f(x) represented as system of partial derivatives: F(x) = \nabla f(x).
-    f(x) = 0.25 * (x_1 - 1)^2 + \sum_{i = 1}^{n - 1}(x_{i + 1} - 2x_{i}^2 + 1)^2
+    f(x) = .25 * (x_1 - 1)^2 + \sum_{i = 1}^{n - 1}(x_{i + 1} - 2x_{i}^2 + 1)^2,
     x = (x_1, ..., x_n).
     Attributes
     ----------
@@ -133,6 +133,7 @@ class NesterovSkokovOracle(Oracle):
             The number of optimizable float parameters, _m = n, _n = n.
         """
         self._m, self._n = n, n
+        self._coords = np.arange(self._m)
     
     def F(self, x, idxs=None):
         """
@@ -142,7 +143,7 @@ class NesterovSkokovOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of F
+            Indexes of used functions in the random sample of F.
         Returns
         -------
         array_like
@@ -150,9 +151,9 @@ class NesterovSkokovOracle(Oracle):
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
         F_vals = np.zeros(self._m)
-        F_vals[0] += (x[0] - 1.0) / 2.0
-        F_vals[1:] += -4.0 * (x[:-1] ** 2) + 2.0 * x[1:] + 2.0
-        F_vals[:-1] += 16.0 * (x[:-1] ** 3) - 8.0 * x[:-1] * x[1:] - 8.0 * x[:-1]
+        F_vals[0] += (x[0] - 1.) / 2.
+        F_vals[1:] += -4. * (x[:-1] ** 2) + 2. * x[1:] + 2.
+        F_vals[:-1] += 16. * (x[:-1] ** 3) - 8. * x[:-1] * x[1:] - 8. * x[:-1]
         F_vals = np.clip(F_vals, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
             return F_vals
@@ -166,7 +167,7 @@ class NesterovSkokovOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of dF
+            Indexes of used functions in the random sample of dF.
         Returns
         -------
         array_like
@@ -174,16 +175,15 @@ class NesterovSkokovOracle(Oracle):
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
         dF_vals = np.zeros((self._m, self._n))
-        coords = np.arange(self._m)
         
         main_diag_vals = np.zeros(self._m)
-        main_diag_vals[0] += 0.5
-        main_diag_vals[1:] += 2.0
-        main_diag_vals[:-1] += 48.0 * (x[:-1] ** 2) - 8.0 * x[1:] - 8.0
+        main_diag_vals[0] += .5
+        main_diag_vals[1:] += 2.
+        main_diag_vals[:-1] += 48. * (x[:-1] ** 2) - 8. * x[1:] - 8.
         
-        dF_vals[coords, coords] += main_diag_vals
-        dF_vals[coords[1:], coords[1:] - 1] += -8.0 * x[:-1]
-        dF_vals[coords[:-1], coords[:-1] + 1] += -8.0 * x[:-1]
+        dF_vals[self._coords, self._coords] += main_diag_vals
+        dF_vals[self._coords[1:], self._coords[1:] - 1] += -8. * x[:-1]
+        dF_vals[self._coords[:-1], self._coords[:-1] + 1] += -8. * x[:-1]
         
         dF_vals = np.clip(dF_vals, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
@@ -209,6 +209,7 @@ class HatOracle(Oracle):
             The number of optimizable float parameters, _m = n, _n = n.
         """
         self._m, self._n = n, n
+        self._coords = np.arange(self._m)
     
     def F(self, x, idxs=None):
         """
@@ -218,7 +219,7 @@ class HatOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of F
+            Indexes of used functions in the random sample of F.
         Returns
         -------
         array_like
@@ -226,8 +227,8 @@ class HatOracle(Oracle):
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
-            return np.clip(4 * (np.sum(x ** 2) - 1.0) * x, a_min=-lim_val, a_max=lim_val)
-        return np.clip(4 * (np.sum(x ** 2) - 1.0) * x[idxs], a_min=-lim_val, a_max=lim_val)
+            return np.clip(4. * (np.sum(x * x) - 1.) * x, a_min=-lim_val, a_max=lim_val)
+        return np.clip(4. * (np.sum(x * x) - 1.) * x[idxs], a_min=-lim_val, a_max=lim_val)
     
     def dF(self, x, idxs=None):
         """
@@ -237,16 +238,15 @@ class HatOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of dF
+            Indexes of used functions in the random sample of dF.
         Returns
         -------
         array_like
             Jacobian the system of equations at point x.
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
-        dF_vals = 8.0 * x * x[:, np.newaxis]
-        coords = np.arange(self._m)
-        dF_vals[coords, coords] += 4.0 * (np.sum(x ** 2) - 1.0)
+        dF_vals = 8. * x * x[:, np.newaxis]
+        dF_vals[self._coords, self._coords] += 4. * (np.sum(x * x) - 1.)
         dF_vals = np.clip(dF_vals, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
             return dF_vals
@@ -281,7 +281,7 @@ class PLOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of F
+            Indexes of used functions in the random sample of F.
         Returns
         -------
         array_like
@@ -289,8 +289,8 @@ class PLOracle(Oracle):
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
-            return np.clip(2.0 * x + 3.0 * np.sin(2.0 * x), a_min=-lim_val, a_max=lim_val)
-        return np.clip((2.0 * x + 3.0 * np.sin(2.0 * x))[idxs], a_min=-lim_val, a_max=lim_val)
+            return np.clip(2. * x + 3. * np.sin(2. * x), a_min=-lim_val, a_max=lim_val)
+        return np.clip((2. * x + 3. * np.sin(2. * x))[idxs], a_min=-lim_val, a_max=lim_val)
     
     def dF(self, x, idxs=None):
         """
@@ -300,7 +300,7 @@ class PLOracle(Oracle):
         x : array_like
             Array of optimizable float parameters.
         idxs : array_like, default=None
-            Indexes of used functions in the random sample of dF
+            Indexes of used functions in the random sample of dF.
         Returns
         -------
         array_like
@@ -308,6 +308,6 @@ class PLOracle(Oracle):
         """
         x = np.clip(x, a_min=-lim_val, a_max=lim_val)
         if idxs is None:
-            return np.clip(np.diag(2.0 + 6.0 * np.cos(2.0 * x)), a_min=-lim_val, a_max=lim_val)
-        return np.clip(np.diag(2.0 + 6.0 * np.cos(2.0 * x))[idxs], a_min=-lim_val, a_max=lim_val)
+            return np.clip(np.diag(2. + 6. * np.cos(2. * x)), a_min=-lim_val, a_max=lim_val)
+        return np.clip(np.diag(2. + 6. * np.cos(2. * x))[idxs], a_min=-lim_val, a_max=lim_val)
 

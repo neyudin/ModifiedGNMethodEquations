@@ -38,27 +38,10 @@ parser.add_argument(
 parser.add_argument(
     '--n_dims', action=Store_as_array, type=int, nargs='+', default=np.array([10, 100, 1000]),
     help='The list of numbers of parameters.')
-parser.add_argument('--stoch_n_dim', type=int, default=1000, help='The number of parameters in stochastic settings.')
-parser.add_argument(
-    '--b_sizes', action=Store_as_array, type=int, nargs='+', default=np.array([1, 10, 100, 1000]),
-    help='The list of the batch sizes, each batch size is no greater than the last value in n_dims.')
-parser.add_argument(
-    '--eta_0_list', action=Store_as_array, type=float, nargs='+',
-    default=np.array([1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0]),
-    help='The list of step scales in the doubly stochastic regime.')
-parser.add_argument(
-    '--eta_list', action=Store_as_array, type=float, nargs='+',
-    default=np.array([1e-4, 1e-3, 1e-2, 1e-1, 1.0]),
-    help='The list of step scales.')
-parser.add_argument('--l_0', type=float, default=1.0,
-                    help='Initial estimate of the local Lipschitz constant for \varphi local model.')
-parser.add_argument('--L_0', type=float, default=1.0,
+parser.add_argument('--L_0', type=float, default=1.,
                     help='Initial estimate of the local Lipschitz constant for \psi local model.')
 parser.add_argument(
-    '--tauL_list', action=Store_as_list, type=str, nargs='+', default=[1e-4, 1.0, 1e3, 1e6, '+inf'],
-    help='The values of \tau L products.')
-parser.add_argument(
-    '--tau_const_list', action=Store_as_list, type=float, nargs='+', default=[1e-6, 1e-4, 1e-2, 1.0, 1e2, 1e4, 1e6],
+    '--tau_const_list', action=Store_as_list, type=float, nargs='+', default=[1e-6, 1e-4, 1e-2, 1., 1e2, 1e4, 1e6],
     help='The values of \tau const.')
 
 

@@ -24,8 +24,8 @@ def psi(F, dF, x, L, tau, y):
     float
         The value of local model evaluated at point y.
     """
-    return tau / 2.0 + L * np.sum(np.square(y - x)) / 2.0 +\
-        np.sum(np.square(F + np.dot(dF, y - x))) / (2.0 * tau)
+    return tau / 2. + L * np.sum(np.square(y - x)) / 2. +\
+        np.sum(np.square(F + np.dot(dF, y - x))) / (2. * tau)
 
 
 def factor_step_probe(F, dF, dF2=None):
@@ -45,7 +45,7 @@ def factor_step_probe(F, dF, dF2=None):
     -------
     Tuple
         The tuple of factors for fast computation of the optimization step:
-        Lambda, Q, ... and other factors
+        Lambda, Q, ... and other factors.
         Lambda : array_like
             The diagonal matrix of eigenvalues of hessian-like matrix.
         Q : array_like
@@ -77,7 +77,7 @@ def probe_x(x, eta, B, v):
     B : array_like
         Hessian-like matrix evaluated at x.
     v : array_like
-        Gradient of 0.5 * f_2(x) evaluated at x.
+        Gradient of .5 * f_2(x) evaluated at x.
     Returns
     -------
     array_like

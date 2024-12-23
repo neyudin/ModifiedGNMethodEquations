@@ -46,22 +46,16 @@ def plot_experiments_results(exp_res_dict, args):
                 for tau, c, marker in zip(tau_const_list, ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'tab:gray'], ['o', '^', 'v', 's', '>', 'x', 'd', '|']):
                     data_sums = []
                     data_sizes = []
-                    data_sums_of_squares = []
                     for iter_counter in range(args.N_iter):
                         for i in range(args.n_starts):
                             if iter_counter < len(exp_res_dict['DetGNM'][name][n][tau][i][stat_name]):
                                 if iter_counter >= len(data_sums):
-                                    data_sums.append(0.0)
+                                    data_sums.append(0.)
                                     data_sizes.append(0)
-                                    data_sums_of_squares.append(0.0)
                                 data_sums[iter_counter] += exp_res_dict['DetGNM'][name][n][tau][i][stat_name][iter_counter]
                                 data_sizes[iter_counter] += 1
-                                data_sums_of_squares[iter_counter] +=\
-                                    exp_res_dict['DetGNM'][name][n][tau][i][stat_name][iter_counter] ** 2
                     data_sizes = np.array(data_sizes)
                     data_means = np.array(data_sums) / data_sizes
-                    data_stds = np.sqrt(np.abs(data_sizes * (np.array(data_sums_of_squares) / data_sizes - data_means ** 2) /\
-                                        np.where(data_sizes > 1, data_sizes - 1, 1)))
                     label = r'$\tau_{k} = \hat{f}_{1}(x_{k})$' if tau == 'GNM' else r'$\tau_k = {:1.0E}$'.format(tau)
                     axes[row, col].plot(np.arange(1, data_means.size + 1), data_means, color=c, marker=marker, markevery=5,
                                         linewidth=1, ls='--', label=label)
@@ -77,7 +71,7 @@ def plot_experiments_results(exp_res_dict, args):
                 if not legend_flag:
                     legend_flag = True
                     handles, labels = axes[row, col].get_legend_handles_labels()
-        fig.legend(handles, labels, bbox_to_anchor=(1.0, 0.9))
+        fig.legend(handles, labels, bbox_to_anchor=(1., .9))
         plt.savefig(fname=args.store_dir + '/GNM_perf_{}_func.eps'.format(stat_type))
         plt.close(fig)
 
