@@ -1,5 +1,5 @@
 # Description
-Code to conduct experiments for the paper [**Modified Gauss-Newton method for solving a smooth system of nonlinear equations**](https://www.mathnet.ru/php/archive.phtml?wshow=paper&jrnid=crm&paperid=911&option_lang=eng).
+Code to conduct experiments for the paper [**Modified Gauss-Newton method for solving a smooth system of nonlinear equations**](https://www.mathnet.ru/links/5c8e34f7dca934e26b7f98b8eeb713be/crm911.pdf).
 
 ## Overview
 
